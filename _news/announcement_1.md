@@ -1,7 +1,7 @@
 ---
 layout: post
-date: 2015-10-22 15:59:00-0400
+date: 2021-05-07 13:15:22 PDT
 inline: true
 ---
 
-A simple inline announcement.
+Graduate school over! Master of Science! Economics!
