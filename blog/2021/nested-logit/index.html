@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Antonio  Jurlina | blank</title>
+<title>Antonio  Jurlina | Nested Logit Reduction</title>
 <meta name="description" content="Blog for miscellaneous writing and projects not written in Python/R/SQL. Based on [*folio](https://github.com/bogoli/-folio) design.
 ">
 
@@ -30,7 +30,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
 
 <link rel="stylesheet" href="/assets/css/main.css">
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/blog/2021/nested-logit/">
 
 <!-- JQuery -->
 <!-- jQuery -->
@@ -114,8 +114,6 @@
           
           
           
-          
-          
           <li class="nav-item ">
               <a class="nav-link" href="/archive/">
                 archive
@@ -163,38 +161,100 @@
     <!-- Content -->
 
     <div class="container mt-5">
-      <div class="post">
+      
 
-  <div class="header-bar">
-    <h1>Antonio Jurlina</h1>
-    <h2>Blog for miscellaneous writing and projects not written in Python/R/SQL.</h2>
-  </div>
+<div class="post">
 
+  <header class="post-header">
+    <h1 class="post-title">Nested Logit Reduction</h1>
+    <p class="post-meta">June 22, 2021</p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/morning-thrill/">Morning Thrill</a></h3>
-        <p class="post-meta">June 25, 2021</p>
-        <p>A poem.</p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/concentrated-maximum-likelihood/">Concentrated Maximum Likelihood</a></h3>
-        <p class="post-meta">June 25, 2021</p>
-        <p>Concentrating the log-likelihood function with respect to one of the parameters.</p>
-      </li>
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/nested-logit/">Nested Logit Reduction</a></h3>
-        <p class="post-meta">June 22, 2021</p>
-        <p>Conditions under which Nested Logit reduces to Multinomial Logit.</p>
-      </li>
-    
-  </ul>
+  <article class="post-content">
+    <p><br /></p>
+
+<p>Recall that the choice probability under the nested logit model takes the form,</p>
+
+\[P_{ij}=P_{iB_k}\times P_{ij|B_k}\]
+
+<p>where \(P_{iB_k}\) denotes the probability of person <em>i</em> choosing nest <em>k</em></p>
+
+\[P_{iB_k}=\frac{e^{W_{ik}+\lambda_k\Phi_{ik}}}{\sum_{l=1}^{K}e^{W_{il}+\lambda_l\Phi_{il}}}\]
+
+<p>where the <em>inclusive value</em> takes the form</p>
+
+\[\Phi_{ik}=ln\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}\]
+
+<p>and</p>
+
+\[P_{ij|B_k}=\frac{e^{\frac{Y_{ij}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}\]
+
+<p>denotes the probability of person <em>i</em> choosing alternative <em>j</em> conditioned on choosing nest <em>k</em>.</p>
+
+<p><br /></p>
+
+<ul>
+  <li>Here, I use algebra to demonstrate that the nested logit model reduces to the multinomial logit model if \(\lambda_k=1\) for all <em>k</em> - the alternatives within every nest are independent of each other. We start with the nested logit choice probability:</li>
+</ul>
+
+\[P_{ij}=P_{iB_k}\times P_{ij|B_k}\]
+
+\[P_{ij}=\frac{e^{W_{ik}+\lambda_k\Phi_{ik}}}{\sum_{l=1}^{K}e^{W_{il}+\lambda_l\Phi_{il}}}\times\frac{e^{\frac{Y_{ij}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}\]
+
+\[P_{ij}=\frac{e^{W_{ik}+\lambda_kln\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}}{\sum_{l=1}^{K}e^{W_{il}+\lambda_lln\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}}\times\frac{e^{\frac{Y_{ij}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}\]
+
+<p><em>Note:</em> \(e^{x+cln(b)}=e^xe^{cln(b)}=e^xe^{lnb^c}=e^xb^c\)</p>
+
+\[P_{ij}=\frac{e^{W_{ik}}\left[\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}\right]^{\lambda_k}}{\sum_{l=1}^ke^{W_{il}}\left[\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_l}}\right]^{\lambda_l}}\times\frac{e^{\frac{Y_{ij}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{Y_{im}}{\lambda_k}}}\times\frac{e^{\frac{W_{ik}}{\lambda_k}}}{e^{\frac{W_{ik}}{\lambda_k}}}\]
+
+\[P_{ij}=\frac{\left[\sum_{m\epsilon B_k}e^{\frac{W_{ik}+Y_{im}}{\lambda_k}}\right]^{\lambda_k}}{\sum_{l=1}^k\left[\sum_{m\epsilon B_k}e^{\frac{W_{il}+Y_{im}}{\lambda_l}}\right]^{\lambda_l}}\times\frac{e^{\frac{W_{ik}+Y_{ij}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{W_{ik}+Y_{im}}{\lambda_k}}}\]
+
+<p><em>Note:</em> \(W_{ik}+Y_{ij}=V_{ik}\)</p>
+
+\[P_{ij}=\frac{\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_k}}\right]^{\lambda_k}}{\sum_{l=1}^k\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_l}}\right]^{\lambda_l}}\times\frac{e^{\frac{V_{ik}}{\lambda_k}}}{\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_k}}}\]
+
+\[P_{ij}=\frac{e^{\frac{V_{ik}}{\lambda_k}}\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_k}}\right]^{\lambda_k-1}}{\sum_{l=1}^k\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_l}}\right]^{\lambda_l}}\]
+
+<p>If we set \(\lambda_k=1\), we get</p>
+
+\[P_{im}=\frac{e^{V_{ik}}}{\sum_me^{V_{im}}}\]
+
+<p>which is the choice probability for the multinomial logit.</p>
+
+<p><br /></p>
+
+<ul>
+  <li>Then, I show that the nested logit model also reduces to the multinomial logit model if all the nests \(B_k\) \((\forall k)\) are singletons, i.e., each choice alternative is contained in its own nest.</li>
+</ul>
+
+<div class="row mt-3">
+    <div class="col-sm mt-3 mt-md-0">
+        <img class="img-fluid rounded z-depth-1" src="/assets/img/nesting_choices.png" />
+    </div>
+</div>
+<div class="caption">
+    Figure 1.
+</div>
+
+<p>Consider a discrete choice model in which each nest contains one choice (Figure 1). This means that when looking at \(P_{ij}\) as derived in part a), we can see that the within-nest summation, \(\sum_{m\epsilon B_k}\), is actually only summing over one variable, rendering the summation symbol unnecessary. That is,</p>
+
+\[P_{ij}=\frac{e^{\frac{V_{ik}}{\lambda_k}}\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_k}}\right]^{\lambda_k-1}}{\sum_{l=1}^k\left[\sum_{m\epsilon B_k}e^{\frac{V_{im}}{\lambda_l}}\right]^{\lambda_l}}\]
+
+<p>reduces to</p>
+
+\[P_{ij}=\frac{e^{\frac{V_{ik}}{\lambda_k}}\left[e^{\frac{V_{im}}{\lambda_k}}\right]^{\lambda_k-1}}{\sum_{l=1}^k\left[e^{\frac{V_{il}}{\lambda_l}}\right]^{\lambda_l}}\]
+
+\[P_{ij}=\frac{e^{\frac{V_{ik}}{\lambda_k}}\left[e^\frac{V_{ik}\lambda_k-V_{ik}}{\lambda_k}\right]}{\sum_{l=1}^{k}e^{V_{il}}}\]
+
+\[P_{ij}=\frac{e^{\frac{V_{ik}}{\lambda_k}}e^{V_{ik}}e^{-\frac{V_{ik}}{\lambda_k}}}{\sum_{l=1}^{k}e^{V_{il}}}\]
+
+\[P_{ik}=\frac{e^{V_{ik}}}{\sum_{l=1}^{k}e^{V_{il}}}\]
+
+<p>which is the choice probability for the multinomial logit.</p>
+
+  </article>
 
   
-
 
 </div>
 
